@@ -702,6 +702,10 @@ class _PinCodeTextFieldState extends State<PinCodeTextField>
   }
 
   Future<void> _showPasteDialog(String pastedText) {
+    if(!isTextValid(pastedText, widget.inputFormatters.first)) {
+      return Future.value();
+    }
+
     final formattedPastedText = pastedText
         .trim()
         .substring(0, min(pastedText.trim().length, widget.length));
@@ -1039,6 +1043,13 @@ class _PinCodeTextFieldState extends State<PinCodeTextField>
       setState(function);
     }
   }
+
+
+  bool isTextValid(String text, TextInputFormatter formatter) {
+  final oldValue = TextEditingValue(text: text);
+  final newValue = formatter.formatEditUpdate(oldValue, oldValue);
+  return newValue.text == text;
+}
 }
 
 enum PinCodeFieldShape { box, underline, circle }
